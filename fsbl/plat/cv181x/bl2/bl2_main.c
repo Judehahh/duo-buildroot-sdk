@@ -112,6 +112,22 @@ void bl2_main(void)
 	mode = CLK_ND;
 #endif
 #endif
+
+	/* If GP15's value is high, enter debug mode. */
+	if (mmio_read_32(GPIO_BASE + 0x050) & (1 << 15)) {
+		NOTICE("=========================================\n");
+		NOTICE("||             Debug Mode              ||\n");
+		NOTICE("||                                     ||\n");
+		NOTICE("=========================================\n");
+
+		mmio_setbits_32(0x3003024, 1 << 6);	/* reset the small core */
+
+		/* pinmux was set for jtag by default */
+
+		while(1)
+			;
+	}
+
 	load_rest(mode);
 	NOTICE("BL2 end.\n");
 
