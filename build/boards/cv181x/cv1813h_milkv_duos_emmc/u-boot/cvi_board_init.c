@@ -1,3 +1,9 @@
+static void set_rtc_register_for_power(void)
+{
+	printf("set_rtc_register_for_power\n");
+	mmio_write_32(0x050260D0, 0x7);
+}
+
 int cvi_board_init(void)
 {
 	// Camera
@@ -11,8 +17,8 @@ int cvi_board_init(void)
 	PINMUX_CONFIG(IIC0_SDA, XGPIOA_29);
 
 	// I2C4
-	PINMUX_CONFIG(VIVO_D1, IIC4_SCL);
-	PINMUX_CONFIG(VIVO_D0, IIC4_SDA);
+	//PINMUX_CONFIG(VIVO_D1, IIC4_SCL);
+	//PINMUX_CONFIG(VIVO_D0, IIC4_SDA);
 
 	// USB
 	PINMUX_CONFIG(USB_VBUS_EN, XGPIOB_5);
@@ -24,5 +30,18 @@ int cvi_board_init(void)
 	PINMUX_CONFIG(UART2_CTS, UART4_CTS);
 	PINMUX_CONFIG(UART2_RTS, UART4_RTS);
 
+	// GPIOs
+	PINMUX_CONFIG(JTAG_CPU_TCK, XGPIOA_18);
+	PINMUX_CONFIG(JTAG_CPU_TMS, XGPIOA_19);
+	PINMUX_CONFIG(JTAG_CPU_TRST, XGPIOA_20);
+	PINMUX_CONFIG(IIC0_SCL, XGPIOA_28);
+
+	// EPHY LEDs
+	PINMUX_CONFIG(PWR_WAKEUP0, EPHY_LNK_LED);
+	PINMUX_CONFIG(PWR_BUTTON1, EPHY_SPD_LED);
+
+	set_rtc_register_for_power();
+
 	return 0;
 }
+
